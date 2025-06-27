@@ -57,10 +57,10 @@ class AdminController extends Controller
         $totalReceipts = \App\Models\Receipt::count();
 
         // Hitung transaksi selesai (status = 1, misalnya)
-        $completedReceipts = \App\Models\Receipt::where('status', 1)->count();
+        $completedReceipts = \App\Models\Receipt::where('status', 'Selesai')->count();
 
         // Hitung transaksi belum selesai (status != 1)
-        $pendingReceipts = \App\Models\Receipt::where('status', '!=', 1)->count();
+        $pendingReceipts = \App\Models\Receipt::where('status', "Terima Hp")->count();
 
         // Kirim data ke view dashboard
         return view('admin.dashboard', [

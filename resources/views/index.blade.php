@@ -47,12 +47,10 @@
                                 <strong>Stok:</strong> {{ $product->stock }}
                             @endif
                         </p>
-                        @if (auth()->user()->role_id == 1)
-                            <a href="https://wa.me/{{  auth()->user()->contact }}" target="_blank" class="btn btn-success btn-sm w-100">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" width="24" height="24" alt="WhatsApp" class="me-2">
-                                Hubungi via WhatsApp
-                            </a>
-                        @endif
+                        <a href="https://wa.me/{{  $product->user->contact }}" target="_blank" class="btn btn-success btn-sm w-100">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" width="24" height="24" alt="WhatsApp" class="me-2">
+                            Hubungi via WhatsApp
+                        </a>
 
                     </div>
                 </div>

@@ -68,7 +68,7 @@
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $receipt->customer_name }}</td>
                 <td>{{ $receipt->code }}</td>
-                <td>{{ $receipt->product->product_name ?? 'Produk dihapus' }}</td>
+                <td>{{ $receipt->product->product_name ?? 'Jasa tidak ada' }}</td>
                 <td>{{ $receipt->status }}</td>
                 <td>{{ \Carbon\Carbon::parse($receipt->estimate)->format('d-m-Y') }}</td>
 
@@ -156,7 +156,9 @@
                         <select name="product_id" class="form-select" required>
                             <option value="">Pilih Produk</option>
                             @foreach($products as $product)
-                                <option value="{{ $product->id }}">{{ $product->product_name }}</option>
+                                @if (str_contains($product->product_name, 'Jasa'))
+                                    <option value="{{ $product->id }}">{{ $product->product_name }}</option>
+                                @endif
                             @endforeach
                         </select>
                     </div>

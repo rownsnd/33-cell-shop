@@ -70,10 +70,8 @@ return new class extends Migration
 
         Schema::create('receipts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('product_id');
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null')->onUpdate('cascade');
+            $table->foreignId('product_id')->nullable()->constrained()->onDelete('set null')->onUpdate('cascade');
             $table->string('customer_name');
             $table->string('code');
             $table->string('status');
