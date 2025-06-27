@@ -16,7 +16,7 @@
                     <a class="nav-link {{ Request::is('admin/category*') ? 'active' : '' }}" href="{{ route('category.index') }}">Kategori</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('receipt/transactions*') ? 'active' : '' }}" href="{{ route('receipt.index') }}">Transaksi</a>
+                    <a class="nav-link {{ Request::is('admin/receipt*') ? 'active' : '' }}" href="{{ route('receipt.index') }}">Transaksi</a>
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto">
