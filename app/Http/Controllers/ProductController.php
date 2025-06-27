@@ -18,7 +18,7 @@ class ProductController extends Controller
         $categoryId = $request->category_id;
         $minPrice = $request->min_price;
         $maxPrice = $request->max_price;
-    
+        $contact = \App\Models\User::where('role_id', '=', 1);
         $products = \App\Models\Product::with('category')
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('product_name', 'like', '%' . $keyword . '%');
@@ -36,21 +36,10 @@ class ProductController extends Controller
             ->get();
     
         $categories = \App\Models\Category::all();
-    
-        return view('index', compact('products', 'categories'));
+           
+        return view('index', compact('products', 'categories','contact'));
     }
     
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $user = Auth::user();
@@ -81,27 +70,12 @@ class ProductController extends Controller
         return redirect()->route('product')->with('success', 'Data berhasil ditambahkan.');
     }
     
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $product = Product::findOrFail($id);
         return view('admin.product', compact('product'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $user = Auth::user();
@@ -139,11 +113,6 @@ class ProductController extends Controller
         return redirect()->route('product')->with('success', 'Data berhasil diubah.');
     }
     
-
-    
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $product = Product::findOrFail($id);

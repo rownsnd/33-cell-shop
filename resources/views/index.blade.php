@@ -47,22 +47,33 @@
                                 <strong>Stok:</strong> {{ $product->stock }}
                             @endif
                         </p>
-                        <a href="https://wa.me/{{  $product->user->contact }}" target="_blank" class="btn btn-success btn-sm w-100">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" width="24" height="24" alt="WhatsApp" class="me-2">
-                            Hubungi via WhatsApp
-                        </a>
-
                     </div>
                 </div>
             </div>
-        @empty
+            @empty
             <div class="col-12">
                 <div class="alert alert-info text-center">
                     Tidak ada produk ditemukan.
                 </div>
             </div>
+            
         @endforelse
     </div>
 </div>
-
+@if($contact)
+<div class="fixed-whatsapp">
+    <a href="https://wa.me/{{  $contact->first()->contact}}" target="_blank" class="btn btn-success btn-sm">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" width="24" height="24" alt="WhatsApp" class="me-2">
+        Hubungi via WhatsApp
+    </a>
+</div>
+@endif
+<style>
+    .fixed-whatsapp {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+    }
+</style>
 @endsection

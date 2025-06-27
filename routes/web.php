@@ -20,22 +20,21 @@ Route::post('/admin/logout', [AuthController::class, 'logout'])->name('logout')-
 
 
 Route::group(['middleware' => ['auth', 'checkRole']], function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+    // Produk dan Jasa
     Route::get('/admin/products', [AdminController::class, 'index'])->name('product');
-    Route::delete('/admin/products/delete/{id}', [ProductController::class, 'destroy'])->name('destroy.product');
     Route::post('/admin/products/store', [ProductController::class, 'store'])->name('store.product');
     Route::put('/admin/products/update/{id}', [ProductController::class, 'update'])->name('update.product');
+    Route::delete('/admin/products/delete/{id}', [ProductController::class, 'destroy'])->name('destroy.product');
 
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-    Route::get('/admin/category', [CategoryController::class, 'index'])->name('category');
-    Route::get('/admin/category/store', [CategoryController::class, 'store'])->name('category.store');
-    Route::get('/admin/category', [CategoryController::class, 'index'])->name('category');
-    Route::get('/admin/category', [CategoryController::class, 'index'])->name('category');
 
     // Category
     Route::get('/admin/category', [CategoryController::class, 'index'])->name('category.index');
-    Route::post('/admin/category', [CategoryController::class, 'store'])->name('category.store');
+    Route::post('/admin/category/store', [CategoryController::class, 'store'])->name('category.store');
     Route::put('/admin/category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
     Route::delete('/admin/category/delete/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
+    
     // Receipt
     Route::get('/admin/receipt', [ReceiptController::class, 'index'])->name('receipt.index');
     Route::post('/admin/receipt', [ReceiptController::class, 'store'])->name('receipt.store');
