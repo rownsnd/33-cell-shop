@@ -11,9 +11,25 @@ use Illuminate\Support\Facades\Auth;
 class ReceiptController extends Controller
 {
     // LIST semua resi
-    public function index()
+    public function index(Request $request)
     {
-        $receipts = Receipt::with(['product', 'user'])->latest()->get();
+        $receipts = Receipt::with(['product', 'user']);
+        
+        if ($request->search) {
+            $receipts->where(function ($query) use ($request) {
+                $query->where('code', 'like', '%' . $request->search . '%')
+                    ->orWhere('customer_name', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        if ($request->sort == 'latest') {
+            $receipts->latest();
+        } elseif ($request->sort == 'oldest') {
+            $receipts->oldest();
+        }
+
+        $receipts = $receipts->get();
+
         $products = Product::all();
         $users = User::all();
 

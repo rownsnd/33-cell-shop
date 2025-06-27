@@ -8,10 +8,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('product.index') ? 'active' : '' }}" href="{{ route('product.index') }}">Home</a>
+                    <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ route('product.index') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('receipt.customer') }}">Resi</a>
+                    <a class="nav-link {{ Request::is('track') ? 'active' : '' }}" href="{{ route('receipt.customer') }}">Resi</a>
                 </li>
             </ul>
         </div>

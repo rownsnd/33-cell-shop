@@ -30,6 +30,23 @@
 
 
     <h1 class="text-center mb-4">Data Resi</h1>
+    <form action="{{ route('receipt.index') }}" method="GET">
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <input type="text" name="search" class="form-control" placeholder="Cari berdasarkan nama atau kode" value="{{ request('search') }}">
+            </div>
+            <div class="col-md-4">
+                <select name="sort" class="form-select">
+                    <option value="">-- Pilih --</option>
+                    <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Terbaru</option>
+                    <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary w-100">Cari</button>
+            </div>
+        </div>
+    </form>
 
     <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Resi</button>
 
@@ -113,7 +130,6 @@
                         </form>
                     </div>
                 </div>
-            </div>
 
             @endforeach
         </tbody>
@@ -162,8 +178,8 @@
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
-        </div>
     </div>
 </div>
 
 @endsection
+

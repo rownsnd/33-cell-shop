@@ -51,10 +51,12 @@ class User extends Authenticatable
         return $this->hasMany(Product::class, 'user_id');
     }
 
-    public function roles()
+    // Di model User.php
+    public function role()
     {
-        return $this->belongsTo(Role::class,'id'); // Adjust the relation to match the user and guest house IDs
+        return $this->belongsTo(Role::class);
     }
+
 
     public function receipts()
 {
