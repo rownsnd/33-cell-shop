@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Product;
+use App\Models\Category;
+use App\Models\User;
 
 class ProductController extends Controller
 {
@@ -18,8 +20,10 @@ class ProductController extends Controller
         $categoryId = $request->category_id;
         $minPrice = $request->min_price;
         $maxPrice = $request->max_price;
-        $contact = \App\Models\User::where('role_id', '=', 1);
-        $products = \App\Models\Product::with('category')
+    
+        $contact = User::where('role_id', '=', 1)->first(); // tambahkan ->first() agar hanya 1 user yang diambil
+    
+        $products = Product::with('category')
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('product_name', 'like', '%' . $keyword . '%');
             })
@@ -33,12 +37,12 @@ class ProductController extends Controller
                 $query->where('price', '<=', $maxPrice);
             })
             ->latest()
-            ->get();
+            ->paginate(10); // paginasi 10 item
+        $categories = Category::all();
     
-        $categories = \App\Models\Category::all();
-           
-        return view('index', compact('products', 'categories','contact'));
+        return view('index', compact('products', 'categories', 'contact'));
     }
+    
     
     public function store(Request $request)
     {
@@ -50,6 +54,7 @@ class ProductController extends Controller
             'picture' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'stock' => 'required|integer|min:0',
             'price' => 'required|integer|min:0',
+            'description' => 'required|string|max:500',
             'category_id' => 'required|exists:categories,id', // pastikan category_id valid
         ]);
     
@@ -84,8 +89,8 @@ class ProductController extends Controller
             'product_name' => 'required|string|max:255',
             'picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'stock' => 'required|integer|min:0',
-            'price' => 'required|integer|min:0',
-            'category_id' => 'required|exists:categories,id', // ✅ tambahkan validasi category
+            'description' => 'required|string|max:500',
+            'category_id' => 'required|exists:categories,id', 
         ]);
     
         $product = Product::findOrFail($id);

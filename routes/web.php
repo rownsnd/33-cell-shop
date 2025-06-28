@@ -6,6 +6,7 @@ Use App\Http\Controllers\AdminController;
 Use App\Http\Controllers\ProductController;
 Use App\Http\Controllers\CategoryController;
 Use App\Http\Controllers\ReceiptController;
+Use App\Http\Controllers\ForgotController;
 
 
 
@@ -40,8 +41,15 @@ Route::group(['middleware' => ['auth', 'checkRole']], function () {
     Route::post('/admin/receipt', [ReceiptController::class, 'store'])->name('receipt.store');
     Route::put('/admin/receipt/update/{id}', [ReceiptController::class, 'update'])->name('receipt.update');
     Route::delete('/admin/receipt/delete/{id}', [ReceiptController::class, 'destroy'])->name('receipt.destroy');
+
+
 });
 
-
+Route::controller(ForgotController::class)->group(function() {
+    Route::get('/forgot-password', 'index')->name('password.request')->middleware('guest');
+    Route::post('/forgot-password', 'forgot_password')->name('password.email')->middleware('guest');
+    Route::get('/forgot-password/reset/{token}', 'reset_password')->name('password.reset')->middleware('guest');
+    Route::post('/password-baru', 'reset_password_store')->name('password.store')->middleware('guest');
+});
 
 ?>

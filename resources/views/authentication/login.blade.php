@@ -58,6 +58,7 @@
                         <button type="submit" class="btn btn-primary btn-lg">
                             Login
                         </button>
+                        <a href="{{ route('password.request') }}">Lupa sandi</a>
                     </div>
                 </form>
             </div>

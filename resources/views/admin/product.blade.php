@@ -2,7 +2,7 @@
 
 @section('content')
     @if(session()->has('success'))
-        <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999">
+        <div class="position-fixed top-0 end-0 p-3 notif" style="z-index: 9999">
             <div id="liveToast" class="toast show align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body">
@@ -17,13 +17,36 @@
     <script>
         const toastEl = document.querySelector('.toast');
         if (toastEl) {
-            const toast = new bootstrap.Toast(toastEl);
+            const toast = new bootstrap.Toast(toastEl, {
+                autohide: true,
+                delay: 3000
+            });
             toast.show();
         }
     </script>
     @include('layouts.navbar-admin')
-    <div class="container">
+    <div class="container mt-4">
         <h1 class="text-center">Data Produk dan Jasa</h1>
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="card shadow-sm text-center">
+                    <div class="card-body">
+                        <h6 class="card-title">Total Categories</h6>
+                        <h4 class="card-text">{{ $totalCategories }}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm text-center">
+                    <div class="card-body">
+                        <h6 class="card-title">Total Products</h6>
+                        <h4 class="card-text">{{ $totalProducts }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-4">
         <form action="{{ route('product') }}" method="GET" class="row g-2 mb-3">
             <div class="col-md-5">
                 <input class="form-control" type="search" name="keyword" placeholder="Cari produk atau jasa..." value="{{ request('keyword') }}">
@@ -46,6 +69,7 @@
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">
                 Tambah
             </button>
+            <div style="overflow-x: auto;">
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -81,141 +105,26 @@
                             <td>{{ $product->stock }}</td>
                             <td>{{ $product->updated_at->format('d-m-Y H:i') }}</td>
                             <td>
-                                <form action="{{ route('destroy.product', $product->id) }}" method="POST" value="{{ csrf_token() }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">Hapus</button>
-                                </form>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $product->id }}">
                                     Ubah
                                 </button>        
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ $product->id }}">
+                                    Hapus
+                                  </button>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+            </div>
         </div>
-    </div>
-    <!-- Modal -->
-    <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="productModalLabel">Tambah Produk atau Jasa</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <form action="{{ route('store.product') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                
-                {{-- Picture --}}
-                <div class="mb-3">
-                  <label for="picture" class="form-label">Gambar</label>
-                  <input type="file" class="form-control" id="picture" name="picture" accept="image/*" required>
-                </div>
-      
-                {{-- Product Name --}}
-                <div class="mb-3">
-                  <label for="product_name" class="form-label">Nama Produk</label>
-                  <input type="text" class="form-control" id="product_name" name="product_name" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Kategori</label>
-                    <select class="form-select" name="category_id" required>
-                        <option value="">Pilih Kategori</option>
-                        @foreach($categories as $category)
-                            <option value="{{ $category->id }}">
-                                {{ $category->category_name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                
-                {{-- Stock --}}
-                <div class="mb-3">
-                  <label for="stock" class="form-label">Stok</label>
-                  <input type="number" class="form-control" id="stock" name="stock" min="0" required>
-                </div>
-      
-                {{-- Price --}}
-                <div class="mb-3">
-                  <label for="price" class="form-label">Harga</label>
-                  <input type="number" class="form-control" id="price" name="price" min="0" required>
-                </div>
-      
-                {{-- User ID (hidden, misal user login) --}}
-                <input type="hidden" name="user_id" value="{{ auth()->id() }}">
-      
-                <button type="submit" class="btn btn-primary">Simpan</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    @foreach ($products as $product)
-    <!-- Modal Edit untuk tiap produk -->
-    <div class="modal fade" id="modalEdit{{ $product->id }}" tabindex="-1" aria-labelledby="modalEditLabel{{ $product->id }}" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalEditLabel{{ $product->id }}">Ubah Produk atau Jasa</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('update.product', $product->id) }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                
-                <div class="mb-3">
-                    <label class="form-label">Gambar (biarkan kosong jika tidak ingin mengganti)</label>
-                    <input type="file" class="form-control" name="picture" accept="image/*">
-                    @if ($product->picture)
-                    <img src="{{ asset('storage/' . $product->picture) }}" width="100" class="mt-2" alt="{{ $product->product_name }}">
-                    @endif
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Nama Produk</label>
-                    <input type="text" class="form-control" name="product_name" value="{{ $product->product_name }}" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Kategori</label>
-                    <select class="form-select" name="category_id" required>
-                        <option value="">Pilih Kategori</option>
-                        @foreach($categories as $category)
-                            <option value="{{ $category->id }}" 
-                                {{ $category->id == $product->category_id ? 'selected' : '' }}>
-                                {{ $category->category_name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Stok</label>
-                    <input type="number" class="form-control" name="stock" min="0" value="{{ $product->stock }}" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Harga</label>
-                    <input type="number" class="form-control" name="price" min="0" value="{{ $product->price }}" required>
-                </div>
-
-                <input type="hidden" name="user_id" value="{{ auth()->id() }}">
-
-                <button type="submit" class="btn btn-success">Simpan Perubahan</button>
-                </form>
-            </div>
-            </div>
+        <div class="mt-4 d-flex justify-content-center">
+            {{ $products->withQueryString()->links('pagination::bootstrap-5') }}
         </div>
     </div>
 
-    @endforeach
-
-
-
+    @include('partials.product.delete-product')
+    @include('partials.product.add-product')
+    @include('partials.product.edit-product')
   
 @endsection

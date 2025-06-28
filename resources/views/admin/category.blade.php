@@ -53,38 +53,13 @@
                     <td>{{ $category->updated_at->format('d-m-Y H:i') }}</td>
                     <td>
                         <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $category->id }}">Ubah</button>
-                        <form action="{{ route('category.destroy', $category->id) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin hapus?')">Hapus</button>
-                        </form>
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $category->id }}">
+                            Hapus
+                        </button>
+                        @include('partials.category.delete-category')
                     </td>
                 </tr>
-
-                <!-- Modal Edit -->
-                <div class="modal fade" id="modalEdit{{ $category->id }}" tabindex="-1" aria-labelledby="modalEditLabel{{ $category->id }}" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <form action="{{ route('category.update', $category->id) }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="modalEditLabel{{ $category->id }}">Ubah Kategori</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label class="form-label">Nama Kategori</label>
-                                        <input type="text" name="category_name" class="form-control" value="{{ $category->category_name }}" required>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-success">Simpan Perubahan</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                @include('partials.category.edit-category')
 
             @empty
                 <tr>
@@ -95,27 +70,5 @@
     </table>
 </div>
 
-<!-- Modal Tambah -->
-<div class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="modalAddLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="{{ route('category.store') }}" method="POST">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalAddLabel">Tambah Kategori</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Nama Kategori</label>
-                        <input type="text" name="category_name" class="form-control" placeholder="Masukkan nama kategori" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+@include('partials.category.add-category')
 @endsection

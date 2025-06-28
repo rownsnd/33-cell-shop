@@ -65,6 +65,7 @@ return new class extends Migration
             $table->string('picture');
             $table->integer('stock');
             $table->integer('price');
+            $table->string('description');
             $table->timestamps();
         });
 

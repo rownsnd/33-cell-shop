@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -12,10 +13,19 @@ class AdminController extends Controller
   
      public function index(Request $request)
      {
+
          $title = 'Product';
+         $totalCategories = Category::count();
+
+         // Hitung total produk
+         $totalProducts = Product::count();
+ 
+         // Hitung total produk per kategori (opsional untuk chart)
+         $productsPerCategory = Category::withCount('products')->get();
+ 
          $keyword = $request->keyword;
          $categoryId = $request->category_id;
-     
+        
          $products = Product::with('category')
              ->when($keyword, function ($query) use ($keyword) {
                  $query->where('product_name', 'like', '%' . $keyword . '%');
@@ -24,11 +34,11 @@ class AdminController extends Controller
                  $query->where('category_id', $categoryId);
              })
              ->latest()
-             ->get();
+             ->paginate(2);
      
-         $categories = \App\Models\Category::all();
+         $categories = Category::all();
      
-         return view('admin.product', compact('products', 'categories', 'title'));
+         return view('admin.product', compact('products', 'categories', 'title', 'totalCategories', 'totalProducts', 'productsPerCategory'));
      }
      
      

@@ -4,6 +4,37 @@
 @include('layouts.navbar-admin')
 
 <div class="container mt-4">
+    <div class="row g-3">
+        <div class="row g-3 mt-2">
+            <div class="col-md-4">
+                <div class="card shadow-sm text-center bg-success text-white">
+                    <div class="card-body">
+                        <h6 class="card-title">Completed Receipts</h6>
+                        <h4 class="card-text">{{ $completedReceipts }}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm text-center bg-warning text-dark">
+                    <div class="card-body">
+                        <h6 class="card-title">Pending Receipts</h6>
+                        <h4 class="card-text">{{ $pendingReceipts }}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm text-center">
+                    <div class="card-body">
+                        <h6 class="card-title">Total Receipts</h6>
+                        <h4 class="card-text">{{ $totalReceipts }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>       
+</div>       
+
+<div class="container mt-4">
     @if(session()->has('success'))
     <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999">
         <div id="liveToast" class="toast show align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
@@ -31,7 +62,7 @@
 
     <h1 class="text-center mb-4">Data Resi</h1>
     <form action="{{ route('receipt.index') }}" method="GET">
-        <div class="row mb-4">
+        <div class="row g-2 mb-4">
             <div class="col-md-4">
                 <input type="text" name="search" class="form-control" placeholder="Cari berdasarkan nama atau kode" value="{{ request('search') }}">
             </div>
@@ -49,7 +80,7 @@
     </form>
 
     <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Resi</button>
-
+    <div style="overflow-x: auto;">
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
@@ -74,114 +105,22 @@
 
                 <td>
                     <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ $receipt->id }}">Ubah</button>
-                    <form action="{{ route('receipt.destroy', $receipt->id) }}" method="POST" class="d-inline">
-                        @csrf @method('DELETE')
-                        <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus resi ini?')">Hapus</button>
-                    </form>
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $receipt->id }}">
+                        Hapus
+                    </button>
+                    @include('partials.receipt.delete-receipt')
+
                 </td>
             </tr>
-            <!-- Modal Edit -->
-            <div class="modal fade" id="editModal{{ $receipt->id }}" tabindex="-1">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form action="{{ route('receipt.update', $receipt->id) }}" method="POST">
-                            @csrf @method('PUT')
-                            <div class="modal-header">
-                                <h5 class="modal-title">Ubah Resi</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label>Customer</label>
-                                    <input type="text" name="customer_name" class="form-control" value="{{ $receipt->customer_name }}" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Kode</label>
-                                    <input type="text" name="code" class="form-control" value="{{ $receipt->code }}" readonly>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Produk</label>
-                                    <select name="product_id" class="form-select" required>
-                                        <option value="">Pilih Produk</option>
-                                        @foreach($products as $product)
-                                            <option value="{{ $product->id }}" {{ $product->id == $receipt->product_id ? 'selected' : '' }}>
-                                                {{ $product->product_name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Status</label>
-                                    <select name="status" class="form-select" required>
-                                        <option value="Terima Hp" {{ $receipt->status == 'Terima Hp' ? 'selected' : '' }}>Terima Hp</option>
-                                        <option value="Proses" {{ $receipt->status == 'Proses' ? 'selected' : '' }}>Proses</option>
-                                        <option value="Selesai" {{ $receipt->status == 'Selesai' ? 'selected' : '' }}>Selesai</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Estimasi</label>
-                                    <input type="date" name="estimate" class="form-control" value="{{ $receipt->estimate }}" required>
-                                </div>
-                                <input type="hidden" name="user_id" value="{{ auth()->id() }}">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-success">Simpan Perubahan</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
+            @include('partials.receipt.edit-receipt')
             @endforeach
         </tbody>
     </table>
-</div>
-
-<!-- Modal Tambah -->
-<div class="modal fade" id="addModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="{{ route('receipt.store') }}" method="POST">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title">Tambah Resi</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label>Customer</label>
-                        <input type="text" name="customer_name" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Produk</label>
-                        <select name="product_id" class="form-select" required>
-                            <option value="">Pilih Produk</option>
-                            @foreach($products as $product)
-                                @if (str_contains($product->product_name, 'Jasa'))
-                                    <option value="{{ $product->id }}">{{ $product->product_name }}</option>
-                                @endif
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label>Status</label>
-                        <select name="status" class="form-select" required>
-                            <option value="Terima Hp">Terima Hp</option>
-                            <option value="Proses">Proses</option>
-                            <option value="Selesai">Selesai</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label>Estimasi</label>
-                        <input type="date" name="estimate" class="form-control" required>
-                    </div>
-                    <input type="hidden" name="user_id" value="{{ auth()->id() }}">
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
     </div>
 </div>
+
+
+@include('partials.receipt.add-receipt')
 
 @endsection
 

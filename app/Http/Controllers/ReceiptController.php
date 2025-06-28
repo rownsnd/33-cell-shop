@@ -13,6 +13,14 @@ class ReceiptController extends Controller
     // LIST semua resi
     public function index(Request $request)
     {
+        // Hitung total transaksi (receipt)
+        $totalReceipts = Receipt::count();
+
+        // Hitung transaksi selesai (status = 1, misalnya)
+        $completedReceipts = Receipt::where('status', 'Selesai')->count();
+
+        // Hitung transaksi belum selesai (status != 1)
+        $pendingReceipts = Receipt::where('status', "Terima Hp")->count();
         $receipts = Receipt::with(['product', 'user']);
         
         if ($request->search) {
@@ -33,13 +41,13 @@ class ReceiptController extends Controller
         $products = Product::all();
         $users = User::all();
 
-        return view('admin.receipt', compact('receipts', 'products', 'users'));
+        return view('admin.receipt', compact('receipts', 'products', 'users','pendingReceipts', 'completedReceipts', 'totalReceipts'));
     }
     // TAMPILKAN form tambah resi
     public function create()
     {
-        $products = \App\Models\Product::all();
-        $users = \App\Models\User::all();
+        $products = Product::all();
+        $users = User::all();
         return view('admin.receipt', compact('products', 'users'));
     }
 

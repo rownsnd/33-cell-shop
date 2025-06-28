@@ -16,6 +16,7 @@ class Product extends Model
         'picture',
         'stock',
         'price',
+        'description'
     ];
 
     // Relasi: Product milik satu kategori

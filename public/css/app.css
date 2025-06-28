@@ -11,3 +11,58 @@
 .modal-content {
     border-radius: 1rem;
 }
+
+@media (max-width: 576px) {
+    .card-title {
+        font-size: 0.9rem !important;
+        line-height: 1.2;
+    }
+    
+    .card-body {
+        padding: 0.75rem !important;
+    }
+    
+    .badge {
+        font-size: 0.6rem !important;
+        padding: 0.25rem 0.5rem !important;
+    }
+}
+
+.hover-lift {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+
+.floating-whatsapp {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.floating-whatsapp .tooltip-text {
+    visibility: hidden;
+    width: 140px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -70px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 12px;
+}
+
+.floating-whatsapp:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
