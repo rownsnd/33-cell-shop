@@ -9,6 +9,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Str;
 use App\Models\User;
+use App\Models\PasswordResetToken;
 use App\Models\ResetPassword;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,22 +23,28 @@ class ForgotController extends Controller
 
     public function forgot_password(Request $request)
     {
-        // Validasi input email
         $request->validate([
             'email' => 'required|email',
         ]);
-    
-        // Kirim link reset password menggunakan Laravel Password Broker
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return back()->withErrors(['email' => 'Email tidak ditemukan']);
+        }
+
         $status = Password::sendResetLink(
             $request->only('email')
         );
-    
-        // Berikan respon berdasarkan status pengiriman link
+
         if ($status === Password::RESET_LINK_SENT) {
+
+            PasswordResetToken::where('email', $user->email)
+                ->update(['user_id' => $user->id]);
+
             return back()->with('status', __($status));
         }
-    
-        // Jika gagal, lemparkan error
+
         throw ValidationException::withMessages([
             'email' => [trans($status)],
         ]);

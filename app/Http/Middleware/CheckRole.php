@@ -17,10 +17,10 @@ class CheckRole
     public function handle(Request $request, Closure $next): Response
     {
         // Ambil id_role user yang sedang login
-        $userRole = Auth::user()->role_id;
+        $userRole = Auth::user()->role_name;
 
         // Periksa apakah role user ada di dalam array roles yang diizinkan
-        if (in_array($userRole, [1,2])) {
+        if (in_array($userRole, ['Admin'])) {
             return $next($request); // Lanjutkan jika cocok
         }
     

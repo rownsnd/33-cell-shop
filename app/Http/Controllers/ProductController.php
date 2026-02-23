@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\User;
+use App\Http\Controllers\CategoryController;
 
 class ProductController extends Controller
 {
@@ -21,7 +22,7 @@ class ProductController extends Controller
         $minPrice = $request->min_price;
         $maxPrice = $request->max_price;
     
-        $contact = User::where('role_id', '=', 1)->first(); // tambahkan ->first() agar hanya 1 user yang diambil
+        $contact = User::where('role_name', '=', 'Admin')->first(); 
     
         $products = Product::with('category')
             ->when($keyword, function ($query) use ($keyword) {
@@ -37,7 +38,7 @@ class ProductController extends Controller
                 $query->where('price', '<=', $maxPrice);
             })
             ->latest()
-            ->paginate(10); // paginasi 10 item
+            ->paginate(10);
         $categories = Category::all();
     
         return view('index', compact('products', 'categories', 'contact'));
@@ -55,7 +56,7 @@ class ProductController extends Controller
             'stock' => 'required|integer|min:0',
             'price' => 'required|integer|min:0',
             'description' => 'required|string|max:500',
-            'category_id' => 'required|exists:categories,id', // pastikan category_id valid
+            'category_id' => 'required|exists:categories,id',
         ]);
     
         // Handle upload gambar

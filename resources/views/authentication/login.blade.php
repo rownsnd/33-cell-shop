@@ -60,6 +60,11 @@
                         </button>
                         <a href="{{ route('password.request') }}">Lupa sandi</a>
                     </div>
+
+                    <div class="d-grid gap-2">
+                        <a href="{{ route('register') }}">Daftar akun</a>
+                    </div>
+
                 </form>
             </div>
         </div>

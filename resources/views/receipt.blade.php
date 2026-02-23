@@ -5,8 +5,8 @@
 
 <div class="container mt-5">
     <div class="text-center mb-5">
-        <h2 class="fw-bold">Lacak Status Resi</h2>
-        <p class="text-muted">Masukkan kode resi Anda untuk melihat status terbaru pesanan atau layanan.</p>
+        <h2 class="fw-bold">Lacak Status Perbaikan</h2>
+        <p class="text-muted">Masukkan kode resi Anda untuk melihat status perbaikan.</p>
     </div>
 
     {{-- Form input kode resi --}}

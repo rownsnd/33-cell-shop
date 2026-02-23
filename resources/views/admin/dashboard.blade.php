@@ -8,22 +8,6 @@
         <div class="col-md-3">
             <div class="card shadow-sm text-center">
                 <div class="card-body">
-                    <h6 class="card-title">Total Users</h6>
-                    <h4 class="card-text">{{ $totalUsers }}</h4>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card shadow-sm text-center">
-                <div class="card-body">
-                    <h6 class="card-title">Total Roles</h6>
-                    <h4 class="card-text">{{ $totalRoles }}</h4>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card shadow-sm text-center">
-                <div class="card-body">
                     <h6 class="card-title">Total Categories</h6>
                     <h4 class="card-text">{{ $totalCategories }}</h4>
                 </div>

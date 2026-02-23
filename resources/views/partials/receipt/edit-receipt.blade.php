@@ -23,7 +23,7 @@
                         <select name="product_id" class="form-select" required>
                             <option value="">Pilih Produk</option>
                             @foreach($products as $product)
-                                @if (str_contains($product->product_name, 'Jasa'))
+                                @if (str_contains($product->category->category_name, 'Jasa'))
                                     <option value="{{ $product->id }}" {{ $product->id == $receipt->product_id ? 'selected' : '' }}>
                                         {{ $product->product_name }}
                                     </option>

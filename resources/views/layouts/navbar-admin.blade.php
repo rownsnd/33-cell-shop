@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(90deg, #0d6efd, #6610f2);">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="#">33 Phone Shop</a>
+        <a class="navbar-brand fw-bold" href="/">33 Phone Shop</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -33,6 +33,7 @@
                         <i class="fas fa-user-circle me-1"></i> {{ auth()->user()->name }}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{{ route('profile.index') }}">Profile</a></li>
                         <li>
                             <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <i class="fas fa-sign-out-alt me-1"></i> Logout

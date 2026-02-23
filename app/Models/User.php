@@ -19,6 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'contact',
         'email',
         'password',
     ];
@@ -59,7 +60,12 @@ class User extends Authenticatable
 
 
     public function receipts()
-{
-    return $this->hasMany(Receipt::class);
-}
+    {
+        return $this->hasMany(Receipt::class);
+    }
+
+    public function passwordResets()
+    {
+        return $this->hasMany(PasswordResetToken::class, 'user_id');
+    }
 }

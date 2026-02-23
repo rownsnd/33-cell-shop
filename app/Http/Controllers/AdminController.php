@@ -48,12 +48,6 @@ class AdminController extends Controller
      */
     public function dashboard()
     {
-        // Hitung total user
-        $totalUsers = \App\Models\User::count();
-
-        // Hitung total role
-        $totalRoles = \App\Models\Role::count();
-
         // Hitung total kategori
         $totalCategories = \App\Models\Category::count();
 
@@ -74,8 +68,6 @@ class AdminController extends Controller
 
         // Kirim data ke view dashboard
         return view('admin.dashboard', [
-            'totalUsers' => $totalUsers,
-            'totalRoles' => $totalRoles,
             'totalCategories' => $totalCategories,
             'totalProducts' => $totalProducts,
             'productsPerCategory' => $productsPerCategory,
