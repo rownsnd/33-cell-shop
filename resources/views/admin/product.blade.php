@@ -51,6 +51,9 @@
             <div class="col-md-5">
                 <input class="form-control" type="search" name="keyword" placeholder="Cari produk atau jasa..." value="{{ request('keyword') }}">
             </div>
+            <div class="col-md-5">
+                <input class="form-control" type="harga_min" name="harga_min" placeholder="Harga Min" value="{{ request('harga_min') }}">
+            </div>
             <div class="col-md-4">
                 <select class="form-select" name="category_id">
                     <option value="">Semua Kategori</option>

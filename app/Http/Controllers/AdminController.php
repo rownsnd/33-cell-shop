@@ -25,6 +25,7 @@ class AdminController extends Controller
  
          $keyword = $request->keyword;
          $categoryId = $request->category_id;
+         $harga_min = $request->harga_min;
         
          $products = Product::with('category')
              ->when($keyword, function ($query) use ($keyword) {
@@ -33,8 +34,11 @@ class AdminController extends Controller
              ->when($categoryId, function ($query) use ($categoryId) {
                  $query->where('category_id', $categoryId);
              })
+             ->when($harga_min, function ($query) use ($harga_min) {
+                 $query->where('price','>=', $harga_min);
+             })
              ->latest()
-             ->paginate(2);
+             ->paginate(10);
      
          $categories = Category::all();
      
